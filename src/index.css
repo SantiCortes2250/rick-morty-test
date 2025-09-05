@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+
+:root {
+  --color-primary-100: #EEE3FF;  
+  --color-primary-600: #8054C7; 
+  --color-primary-700: #5A3696; 
+  --color-secondary-600: #63D838;
+}
+
+
+.item:hover {
+  background-color: var(--color-primary-100);
+
+}
+
+.btn-selected{
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-700);
+}
+
+
+.filter-changed{
+  background-color: var(--color-primary-700);
+}
+
+
+.btn-send{
+  background-color: var(--color-secondary-600);
+}

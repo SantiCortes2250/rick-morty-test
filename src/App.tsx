@@ -1,14 +1,21 @@
+import { Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Slidebar";
+import CharacterDetail from "./components/CharacterDetail";
 
-
-
-function App() {
-
-
+export default function App() {
   return (
-    <>
-      <h1 className="text-2xl">Hellooo!!</h1>
-    </>
-  )
+    <div className="flex h-screen">
+      <Sidebar />
+      {/* Panel derecho para detalle */}
+      <main className="flex-1 p-6 overflow-y-auto">
+        <Routes>
+          <Route
+            path="/"
+            element={<p className="text-gray-500">Selecciona un personaje</p>}
+          />
+          <Route path="/character/:id" element={<CharacterDetail />} />
+        </Routes>
+      </main>
+    </div>
+  );
 }
-
-export default App
