@@ -17,6 +17,8 @@ This app allows you to:
 ---
 
 ## 🧭 Project structure (root)
+```bash
+
 
 ├── node_modules
 ├── public
@@ -40,6 +42,8 @@ This app allows you to:
 ├── README.md
 ├── tsconfig.*.json
 └── vite.config.ts
+
+```
 
 ## 🛠 Tech stack
 - **Vite** (fast dev server)
