@@ -1,21 +1,22 @@
 import { Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Slidebar";
-import CharacterDetail from "./components/CharacterDetail";
+import HomePage from "./pages/Home";
+import { useCharacterStore } from "./store/useCharacterStore";
+import { useEffect } from "react";
 
 export default function App() {
+  const { darkMode } = useCharacterStore();
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      {/* Panel derecho para detalle */}
-      <main className="flex-1 p-6 overflow-y-auto">
-        <Routes>
-          <Route
-            path="/"
-            element={<p className="text-gray-500">Selecciona un personaje</p>}
-          />
-          <Route path="/character/:id" element={<CharacterDetail />} />
-        </Routes>
-      </main>
-    </div>
+    <Routes>
+      <Route path="/*" element={<HomePage />} />
+    </Routes>
   );
 }

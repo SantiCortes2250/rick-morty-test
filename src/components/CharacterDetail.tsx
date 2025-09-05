@@ -1,14 +1,29 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client/react";
 import { GET_CHARACTER } from "../queries/character";
 import { useCharacterStore } from "../store/useCharacterStore";
 import favoriteIcon from "@/assests/icons/favorite.svg";
 import notFavoriteIcon from "@/assests/icons/not-favorite.svg";
+import backButtonIcon from "@/assests/icons/back.svg";
 import Comments from "./Comments";
+
+type Character = {
+  id: string;
+  name: string;
+  image: string;
+  species: string;
+  status: string;
+  type?: string;
+};
+
+type CharacterQueryData = {
+  character: Character;
+};
 
 export default function CharacterDetail() {
   const { id } = useParams<{ id: string }>();
-  const { loading, error, data } = useQuery(GET_CHARACTER, {
+  const navigate = useNavigate();
+  const { loading, error, data } = useQuery<CharacterQueryData>(GET_CHARACTER, {
     variables: { id },
   });
 
@@ -19,13 +34,21 @@ export default function CharacterDetail() {
 
 
 
-  if (loading) return <p className="p-4">Cargando...</p>;
-  if (error) return <p className="p-4 text-red-500">Error: {error.message}</p>;
-  if (!character) return <p className="p-4">No encontrado</p>;
+
+  if (loading) return <p className="p-4 font-semibold text-lg">Loading...</p>;
+  if (error) return <p className="p-4 font-semibold text-lg text-red-500">Error: {error.message}</p>;
+  if (!character) return <p className="p-4 font-semibold text-lg">Not found</p>;
 
   return (
-    <div className="p-2 max-w-4xl mx-auto">
-      {/* <Link to="/" className="text-blue-600 hover:underline">&larr; Volver</Link> */}
+    <div className="p-6 h-screen overflow-y-auto">
+       <div className="w-full lg:flex-1">
+      <button
+        onClick={() => navigate("/")}
+        className="flex items-center gap-2 mb-4 lg:hidden text-purple-600 font-semibold"
+      >
+        {<img src={backButtonIcon} alt="back" />}
+      </button>
+    </div>
 
       <div className=" mx-auto p-4">
         {/* Header */}

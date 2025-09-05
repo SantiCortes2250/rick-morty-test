@@ -11,14 +11,19 @@ interface Filters {
 }
 
 interface CharacterState {
+  darkMode: boolean;
+  selectedId: number | null;
   total: number;
   favorites: number[];
   comments: Record<number, string[]>;
   filters: Filters;
+  toggleDarkMode: () => void;
   toggleFavorite: (id: number) => void;
+  removeComment: (id: number, index: number) => void;
   addComment: (id: number, comment: string) => void;
   setFilters: (filters: Partial<Filters>) => void;
   setTotal: (total: number) => void;
+  setSelectedId: (id: number | null) => void;
 }
 
 export const useCharacterStore = create<CharacterState>()(
@@ -27,6 +32,8 @@ export const useCharacterStore = create<CharacterState>()(
       favorites: [],
       comments: {},
       total: 0,
+      selectedId: null,
+      darkMode: false,
       filters: {
         favorites: "all",
         species: "all",
@@ -35,6 +42,7 @@ export const useCharacterStore = create<CharacterState>()(
         search: "",
         sort: "asc",
       },
+      toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
 
       toggleFavorite: (id) =>
         set((state) => {
@@ -54,11 +62,24 @@ export const useCharacterStore = create<CharacterState>()(
           },
         })),
 
+      removeComment: (characterId, index) =>
+        set((state) => {
+          const updated = [...(state.comments[characterId] || [])];
+          updated.splice(index, 1);
+          return {
+            comments: {
+              ...state.comments,
+              [characterId]: updated,
+            },
+          };
+        }),
+
       setFilters: (filters) =>
         set((state) => ({
           filters: { ...state.filters, ...filters },
         })),
       setTotal: (total) => set(() => ({ total })),
+      setSelectedId: (id) => set(() => ({ selectedId: id })),
     }),
     { name: "character-storage" }
   )

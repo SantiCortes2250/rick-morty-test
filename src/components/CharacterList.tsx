@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client/react";
 import { GET_CHARACTERS } from "../queries/characters";
 import CharacterCard from "./CharacterItem";
 import { useCharacterStore } from "../store/useCharacterStore";
-import { useEffect } from "react";
+import { useMemo, useEffect } from "react";
 
 type Character = {
   id: string;
@@ -23,59 +23,55 @@ export default function CharacterList() {
   const { loading, error, data } = useQuery<CharactersData>(GET_CHARACTERS);
   const { favorites, filters, setTotal } = useCharacterStore();
 
-  let characters = data?.characters?.results || [];
+  const characters = useMemo(() => {
+    let results = data?.characters?.results || [];
 
-  // Filtro de búsqueda
-  if (filters.search) {
-    characters = characters.filter((c: any) =>
-      c.name.toLowerCase().includes(filters.search.toLowerCase())
+    // 🚫 Excluir personajes que ya están en favoritos
+    results = results.filter((c) => !favorites.includes(Number(c.id)));
+
+    // 🔍 Filtro búsqueda
+    if (filters.search) {
+      results = results.filter((c) =>
+        c.name.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+
+    // ⚡ Filtros avanzados
+    if (filters.status !== "all") {
+      results = results.filter((c) => c.status === filters.status);
+    }
+    if (filters.species !== "all") {
+      results = results.filter((c) => c.species === filters.species);
+    }
+    if (filters.gender !== "all") {
+      results = results.filter((c) => c.gender === filters.gender);
+    }
+
+    // ↕ Ordenar
+    results = [...results].sort((a, b) =>
+      filters.sort === "asc"
+        ? a.name.localeCompare(b.name)
+        : b.name.localeCompare(a.name)
     );
-  }
 
-  // Filtro de favoritos
-  if (filters.favorites === "starred") {
-    characters = characters.filter((c: any) =>
-      favorites.includes(Number(c.id))
-    );
-  } else if (filters.favorites === "others") {
-    characters = characters.filter(
-      (c: any) => !favorites.includes(Number(c.id))
-    );
-  }
+    return results;
+  }, [data, filters, favorites]);
 
-  // Filtros avanzados
-  if (filters.status !== "all") {
-    characters = characters.filter((c: any) => c.status === filters.status);
-  }
-  if (filters.species !== "all") {
-    characters = characters.filter((c: any) => c.species === filters.species);
-  }
-  if (filters.gender !== "all") {
-    characters = characters.filter((c: any) => c.gender === filters.gender);
-  }
-
-  // Orden
-  //   characters.sort((a: any, b: any) =>
-  //     filters.sort === "asc"
-  //       ? a.name.localeCompare(b.name)
-  //       : b.name.localeCompare(a.name)
-  //   );
-
-  // Actualizar total en el store solo cuando cambia
+  // 📝 Actualizar total
   useEffect(() => {
     setTotal(characters.length);
   }, [characters.length, setTotal]);
 
-  if (loading) return <p className="p-4">Cargando...</p>;
-  if (error) return <p className="p-4 text-red-500">Error: {error.message}</p>;
+  if (loading) return <p className="p-4 font-semibold text-lg">Loading...</p>;
+  if (error) return <p className="p-4font-semibold text-lg text-red-500">Error: {error.message}</p>;
 
   return (
     <>
       <h2 className="text-sm font-semibold text-gray-500">
         CHARACTERS ({characters.length})
       </h2>
-      <ul className="">
-        {characters.map((c: any) => (
+      <ul>
+        {characters.map((c) => (
           <CharacterCard
             key={c.id}
             id={Number(c.id)}

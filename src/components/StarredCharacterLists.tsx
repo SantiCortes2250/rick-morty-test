@@ -22,25 +22,25 @@ export default function StarredCharacterList() {
   const { loading, error, data } = useQuery<CharactersData>(GET_CHARACTERS);
   const { favorites } = useCharacterStore();
 
-  if (loading) return <p className="p-4">Cargando...</p>;
-  if (error) return <p className="p-4 text-red-500">Error: {error.message}</p>;
+  if (loading) return <p className="p-4 font-semibold text-sm">Loading...</p>;
+  if (error) return <p className="p-4 font-semibold text-sm text-red-500">Error: {error.message}</p>;
 
-  // solo los personajes que estén en favoritos
+  // only starred characters
   const characters =
     data?.characters?.results.filter((c) => favorites.includes(Number(c.id))) ||
     [];
 
   if (characters.length === 0) {
     return (
-      <p className="p-4 text-gray-500 text-sm">
-        No tienes personajes favoritos aún.
+      <p className="text-gray-500 text-sm font-semibold">
+        Don't have starred characters
       </p>
     );
   }
 
   return (
     <>
-    <h2 className="text-sm font-semibold text-gray-500">STARRED CHARACTERS ({favorites.length - 1})</h2>
+    <h2 className="text-sm font-semibold text-gray-500">STARRED CHARACTERS ({favorites.length})</h2>
       <ul className="">
         {characters.map((c) => (
           <CharacterCard

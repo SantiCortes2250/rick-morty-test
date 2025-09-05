@@ -11,14 +11,14 @@ export default function SearchBar() {
 
   return (
     <div className="relative w-full">
-      <div className="flex items-center bg-gray-100 rounded-xl px-3 py-2">
+      <div className="flex items-center bg-gray-100 rounded-xl px-3 py-2 dark:bg-gray-800">
         <img src={searchIcon} className="" alt="" />
         <input
           type="text"
           placeholder="Search or filter results"
           value={filters.search}
           onChange={(e) => setFilters({ search: e.target.value })}
-          className="flex-1 bg-transparent outline-none px-2 text-gray-700"
+          className="flex-1 bg-transparent outline-none px-2 text-gray-700 dark:text-gray-200"
         />
         <button
           className={`text-primary-600 cursor-pointer rounded-lg item transition ${showFilters ? 'btn-selected' : 'hover:bg-gray-200'}`}

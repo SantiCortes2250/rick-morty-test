@@ -16,28 +16,35 @@ export default function CharacterCard({
   species,
   image,
 }: CharacterCardProps) {
-  const { favorites, toggleFavorite } = useCharacterStore();
+  const { favorites, toggleFavorite, selectedId, setSelectedId } = useCharacterStore();
   const isFavorite = favorites.includes(id);
   const navigate = useNavigate();
+
+  const isSlected = selectedId === id;
 
   return (
     <li
       key={id}
-      onClick={() => navigate(`/character/${id}`)}
-      className="item flex items-center justify-between p-4 rounded-md cursor-pointer border-t-gray-200 border border-transparent"
+      onClick={() => {
+        setSelectedId(id);
+        navigate(`/character/${id}`)
+      }}
+      className={`item flex items-center justify-between p-4 rounded-md cursor-pointer border-t-gray-200 border border-transparent  dark:hover:text-gray-900
+      ${isSlected ? "id-selected dark:text-gray-950" : ""}
+      `}
     >
       <div className="flex items-center gap-2">
         <img src={image} alt={name} className="w-8 h-8 rounded-full" />
         <div>
           <p className="text-sm font-medium">{name}</p>
-          <p className="text-xs text-gray-500">{species}</p>
+          <p className="text-sm text-gray-500">{species}</p>
         </div>
       </div>
       <button
         className="cursor-pointer"
         onClick={(e) => {
-          e.stopPropagation(); // evita que el click "suba" al contenedor
-          e.preventDefault(); // evita que dispare navegación si está dentro de un <Link>
+          e.stopPropagation(); 
+          e.preventDefault(); 
           toggleFavorite(id);
         }}
       >

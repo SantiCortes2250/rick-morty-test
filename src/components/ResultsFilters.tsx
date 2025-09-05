@@ -1,9 +1,11 @@
 import { useCharacterStore } from "../store/useCharacterStore";
 
 export default function ResultsFilters() {
-  const { filters, total } = useCharacterStore();
+  const { filters, total, favorites } = useCharacterStore();
 
-  // Verificar si hay filtros distintos al default
+
+  const totalCharacters = total + favorites.length;
+
   const activeFilters = [
     filters.favorites !== "all",
     filters.status !== "all",
@@ -14,12 +16,12 @@ export default function ResultsFilters() {
 
   return (
     <div className="flex justify-between items-center">
-      {/* Cantidad de resultados */}
+      {/* results total */}
        {activeFilters > 0 && (
-      <span className="text-blue-600 font-semibold">{total} Results</span>
+      <span className="text-blue-600 font-semibold">{totalCharacters} Results</span>
        )}
 
-      {/* Badge de filtros */}
+      {/* filters badge */}
       {activeFilters > 0 && (
         <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
           {activeFilters} Filter{activeFilters > 1 ? "s" : ""}
