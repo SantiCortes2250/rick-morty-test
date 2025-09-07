@@ -57,6 +57,26 @@ This app allows you to:
 
 ---
 
+## 🌐 API usage
+- This app fetches data from the Rick and Morty GraphQL API.
+- No API key is required.
+- EndPonit: `https://rickandmortyapi.com/graphql`
+```bash
+query {
+  characters(page: 1) {
+    results {
+      id
+      name
+      status
+      species
+      gender
+      image
+    }
+  }
+}
+```
+---
+
 ## ✨ What to review first (for code reviewers)
 1. `src/store/useCharacterStore.ts` — global state logic (favorites, comments, filters, persistence).
 2. `src/queries/characters.ts` — main GraphQL query.
@@ -77,3 +97,15 @@ cd rick-morty-test
 npm install
 # or yarn
 # yarn
+
+# Run de app locally
+npm run dev
+
+# Run tests
+npm run test
+
+```
+
+## 🌍 Live Demo
+`https://rick-morty-testb.netlify.app/`
+
